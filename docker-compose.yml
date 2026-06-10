@@ -1,0 +1,50 @@
+
+services:
+  postgres_db:
+    image: postgres:15-alpine 
+    container_name: avito_postgres_container 
+    restart: always 
+    environment:
+      POSTGRES_USER: ${DB_USER}       
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}        
+    ports:
+      - "5432:5432" 
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+    healthcheck: 
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrations:
+    image: migrate/migrate
+    container_name: avito_migrations_container
+    volumes:
+      - ./migrations:/migrations 
+    command: 
+      -path=/migrations
+      -database "postgres://${DB_USER}:${DB_PASSWORD}@postgres_db:${DB_PORT}/${DB_NAME}?sslmode=${DB_SSLMODE}" 
+      up
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+
+  avito_api:
+    build: .
+    container_name: avito_api_container
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    environment:
+      DB_HOST: postgres_db
+    env_file:
+      - .env
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+
+volumes:
+  pgdata:
