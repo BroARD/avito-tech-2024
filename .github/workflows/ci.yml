@@ -29,21 +29,5 @@ jobs:
     - name: Run Build
       run: go build -v ./...
 
-    - name: Run Tests with Coverage
-      run: go test -v -coverprofile=coverage.out -covermode=count ./...
-
-    - name: Create empty coverage file
-      run: touch coverage.svg
-
-    - name: Generate Coverage Badge
-      uses: tj-actions/coverage-badge-go@v3
-      with:
-        filename: coverage.out
-        target: coverage.svg
-
-
-    - name: Commit and Push Coverage Badge
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        commit_message: "chrono: update coverage badge [skip ci]"
-        file_pattern: 'README.md *.svg'
+    - name: Go Coverage Report
+      uses: ncruces/go-coverage-report@v0

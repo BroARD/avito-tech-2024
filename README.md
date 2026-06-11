@@ -1,8 +1,8 @@
 # Проект Avito Tech
 
 <!-- Бейдж статуса сборки (Build Status) -->
-[![Go CI](https://github.com/BroARD/avito-tech-2024/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/BroARD/avito-tech-2024/actions/workflows/ci.yml)
-
+[![Build](https://github.com/BroARD/avito-tech-2024/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/BroARD/avito-tech-2024/actions/workflows/ci.yml)
+![Coverage][def]
 
 
 Описание Сервиса:
@@ -72,3 +72,5 @@
 База данных: – PostgreSQL.
 
 Запуск через Docker Compose
+
+[def]: https://githubusercontent.com
