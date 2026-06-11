@@ -1,3 +1,12 @@
+# Проект Avito Tech
+
+<!-- Бейдж статуса сборки (Build Status) -->
+![Build Status](https://github.com)
+
+<!-- Бейдж покрытия кода тестами (Code Coverage) -->
+![Code Coverage](https://githubusercontent.com)
+
+
 Описание Сервиса:
 
     Backend-сервис, с помощью которого пользователь сможет продать квартиру, загрузив объявление Авито. 

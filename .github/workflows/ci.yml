@@ -1,0 +1,46 @@
+name: Go CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/go-versions@v1
+      with:
+        go-version: '1.22' # Укажите используемую вами версию Go
+
+    - name: Install dependencies
+      run: go mod download
+
+    - name: Run Build
+      run: go build -v ./...
+
+    - name: Run Tests with Coverage
+      run: go test -v -coverprofile=coverage.out -covermode=count ./...
+
+    - name: Generate Coverage Badge
+      uses: cicirello/jacoco-badge-generator@v2
+      with:
+        text-mode: true
+        parse-go-coverage: true
+        go-coverage-file: coverage.out
+        coverage-badge-filename: coverage.svg
+
+    - name: Commit and Push Coverage Badge
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "chrono: update coverage badge [skip ci]"
+        file_pattern: 'README.md *.svg'
