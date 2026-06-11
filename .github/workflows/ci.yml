@@ -29,5 +29,13 @@ jobs:
     - name: Run Build
       run: go build -v ./...
 
+    - name: Run Tests with Coverage
+      run: go test -v -coverprofile=coverage.out -covermode=count ./...
+
     - name: Go Coverage Report
       uses: ncruces/go-coverage-report@v0
+      with:
+        report: 'true' 
+        chart: 'true' 
+        amend: 'true'
+      if: github.event_name == 'push'
