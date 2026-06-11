@@ -145,3 +145,25 @@ func TestLoginUser(t *testing.T) {
 		})
 	}
 }
+
+func TestGenerateDummyToken(t *testing.T) {
+	mockRepo := &authRepoMock{}
+	service := NewAuthService([]byte("secret"), mockRepo)
+
+	tokenClient, err := service.GenerateDummyToken(context.Background(), entity.RoleClient)
+	if err != nil {
+		t.Fatalf("Не ожидали ошибку при генерации dummy токена клиента: %v", err)
+	}
+	if tokenClient == "" {
+		t.Error("Dummy токен клиента пустой")
+	}
+
+	tokenMod, err := service.GenerateDummyToken(context.Background(), entity.RoleModerator)
+	if err != nil {
+		t.Fatalf("Не ожидали ошибку при генерации dummy токена модератора: %v", err)
+	}
+	if tokenMod == "" {
+		t.Error("Dummy токен модератора пустой")
+	}
+}
+
