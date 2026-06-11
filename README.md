@@ -2,7 +2,8 @@
 
 <!-- Бейдж статуса сборки (Build Status) -->
 [![Build](https://github.com/BroARD/avito-tech-2024/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/BroARD/avito-tech-2024/actions/workflows/ci.yml)
-![Coverage](https://raw.githubusercontent.com/BroARD/avito-tech-2024/main/coverage.svg)
+[![Go Coverage](https://github.com/BroARD/avito-tech-2024/wiki/coverage.svg)](https://raw.githack.com/wiki/BroARD/avito-tech-2024/coverage.html)
+
 
 
 Описание Сервиса:
