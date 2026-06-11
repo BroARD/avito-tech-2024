@@ -3,8 +3,6 @@
 <!-- Бейдж статуса сборки (Build Status) -->
 [![Go CI](https://github.com/BroARD/avito-tech-2024/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/BroARD/avito-tech-2024/actions/workflows/ci.yml)
 
-<!-- Бейдж покрытия кода тестами (Code Coverage) -->
-![Code Coverage](https://githubusercontent.com)
 
 
 Описание Сервиса:
