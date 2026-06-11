@@ -53,11 +53,11 @@ func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 
 	user, err := h.serv.Register(r.Context(), &input)
 
-	response := *&dto.RegisterResponse{
+	response := &dto.RegisterResponse{
 		Email: user.Email,
 		Role: user.Role,
 	}
-	
+
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
