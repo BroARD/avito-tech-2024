@@ -13,7 +13,7 @@ import (
 
 type Service interface {
 	GenerateDummyToken(ctx context.Context, role entity.UserRole) (string, error)
-	Register(ctx context.Context, newUser *dto.RegisterInput) (*dto.RegisterResponse, error)
+	Register(ctx context.Context, newUser *dto.RegisterInput) (*entity.User, error)
 	Login(ctx context.Context, input *dto.LoginInput) (*dto.LoginResponse, error)
 }
 
@@ -46,7 +46,7 @@ func (s *authService) Login(ctx context.Context, input *dto.LoginInput) (*dto.Lo
 }
 
 // Register implements [Service].
-func (s *authService) Register(ctx context.Context, newUser *dto.RegisterInput) (*dto.RegisterResponse, error) {
+func (s *authService) Register(ctx context.Context, newUser *dto.RegisterInput) (*entity.User, error) {
 	hashPassword, err := hashPassword(newUser.Password)
 	if err != nil {
 		return nil, err
@@ -61,10 +61,7 @@ func (s *authService) Register(ctx context.Context, newUser *dto.RegisterInput) 
 		return nil, err
 	}
 
-	return &dto.RegisterResponse{
-		Email: user.Email,
-		Role: user.Role,
-	}, nil
+	return user, nil
 }
 
 // GenerateDummyToken implements [Service].
