@@ -32,6 +32,9 @@ jobs:
     - name: Run Tests with Coverage
       run: go test -v -coverprofile=coverage.out -covermode=count ./...
 
+    - name: Create empty coverage file
+      run: touch coverage.svg
+
     - name: Generate Coverage Badge
       uses: tj-actions/coverage-badge-go@v3
       with:
