@@ -70,7 +70,7 @@ func TestCreateHouse(t *testing.T) {
 			result, err := service.Create(context.Background(), &tc.input)
 
 			if tc.wantErr {
-				if err != nil || err.Error() != tc.expectedErr {fmt.Errorf("Ожидалась ошибка %q, а получили ошибка %v", tc.expectedErr, err)}
+				if err == nil || err.Error() != tc.expectedErr {t.Errorf("Ожидалась ошибка %q, а получили ошибка %v", tc.expectedErr, err)}
 				return
 			}
 			if err != nil { t.Fatalf("Не ожидали ошибку: %v", err) }
