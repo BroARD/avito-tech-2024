@@ -73,7 +73,7 @@ func TestHandlerCreateFlat(t *testing.T) {
 				}
 			},
 		},
-				{
+		{
 			name: "Failed: Ошибка на уровне сервиса",
 			inputBody: `{"house_id": 1, "number": 11, "price": 10000, "rooms": 1}`,
 			setupMock: func(m *flatServiceMock) {
@@ -88,7 +88,7 @@ func TestHandlerCreateFlat(t *testing.T) {
 				}
 			},
 		},
-				{
+		{
 			name: "Failed: Неверный формат JSON",
 			inputBody: `{"house_id": 1, "number": 11, "price": 10000, "rooms": 1`,
 			setupMock: nil,
