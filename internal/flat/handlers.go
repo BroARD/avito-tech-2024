@@ -30,14 +30,8 @@ func (h *flatHandler) ChangeStatus(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userRole, ok := r.Context().Value(middleware.RoleKey).(entity.UserRole)
-	if !ok {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusForbidden)
-		json.NewEncoder(w).Encode(map[string]string{"error": "АВТОРИЗУЙСЯ ДЕБИК"})
-		return
-	}
-	if userRole != "moderator" {
-		http.Error(w, `{"error":"Это не твой уровень дорогой"}`, http.StatusBadRequest)
+	if !ok || userRole != entity.RoleModerator {
+		http.Error(w, `{"error":"Это не твой уровень дорогой"}`, http.StatusForbidden)
 		return
 	}
 
@@ -50,7 +44,7 @@ func (h *flatHandler) ChangeStatus(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(flat)
 
 }
@@ -61,6 +55,7 @@ func (h *flatHandler) GetByHouseID(w http.ResponseWriter, r *http.Request) {
 	houseID, err := strconv.ParseUint(idStr, 10, 64)
 	if err != nil {
 		http.Error(w, `{"error":"Неправильный ID дома"}`, http.StatusBadRequest)
+		return
 	}
 
 	userRole, ok := r.Context().Value(middleware.RoleKey).(entity.UserRole)
@@ -71,24 +66,32 @@ func (h *flatHandler) GetByHouseID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if userRole == "moderator" {
+	switch userRole {
+	case entity.RoleModerator: 
 		flats, err := h.serv.GetAllByHouseID(r.Context(), uint(houseID))
 		if err != nil {
-			http.Error(w, `{"error": "Ошибка при получение квартир из этого дома"}`, http.StatusInternalServerError)
+			http.Error(w, `{"error": "Ошибка при получении квартир из этого дома"}`, http.StatusInternalServerError)
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(flats)
-	} else {
+
+	case entity.RoleClient: 
 		flats, err := h.serv.GetApprovedByHouseID(r.Context(), uint(houseID))
 		if err != nil {
-			http.Error(w, `{"error": "Ошибка при получение квартир из этого дома"}`, http.StatusInternalServerError)
+			http.Error(w, `{"error": "Ошибка при получении квартир из этого дома"}`, http.StatusInternalServerError)
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(flats)
+
+	default:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusForbidden)
+		json.NewEncoder(w).Encode(map[string]string{"error": "АВТОРИЗУЙСЯ ДЕБИК"})
+		return
 	}
 }
 
