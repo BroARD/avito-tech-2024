@@ -6,6 +6,7 @@ import (
 	"avito-tech/internal/middleware"
 	"bytes"
 	"context"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -74,6 +75,22 @@ func TestHandlerCreateHouse(t *testing.T) {
 			checkResult: func(t *testing.T, rec *httptest.ResponseRecorder) {
 				if rec.Code != http.StatusBadRequest {
 					t.Errorf("Ожидали статус ошибки доступа 400, получили %d", rec.Code)
+				}
+			},
+		},
+		{
+			name: "Failed: Ошибка на уровне сервиса",
+			inputBody: `{"address": "Test_Address", "year": 1999, "developer": "someone"}`,
+			inputRole: entity.RoleModerator,
+			setupMock: func(m *houseServiceMock) {
+				m.CreateFunc = func(ctx context.Context, house *dto.CreateHouseInput) (*entity.House, error) {
+					return nil, fmt.Errorf("Какая то ошибка на уровне сервиса")
+				}
+			},
+			wantErr: true,
+			checkResult: func(t *testing.T, rec *httptest.ResponseRecorder) {
+				if rec.Code != http.StatusInternalServerError {
+					t.Errorf("Ожидали статус ошибки доступа 500, получили %d", rec.Code)
 				}
 			},
 		},
