@@ -52,20 +52,20 @@ func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user, err := h.serv.Register(r.Context(), &input)
-
-	response := &dto.RegisterResponse{
-		Email: user.Email,
-		Role: user.Role,
-	}
-
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{"error": "Ошибка при регистрации"})
 		return
 	}
+	
+	response := &dto.RegisterResponse{
+		Email: user.Email,
+		Role: user.Role,
+	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(response)
 }
 
