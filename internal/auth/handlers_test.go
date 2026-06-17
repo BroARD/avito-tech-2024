@@ -203,7 +203,7 @@ func TestHandlerDummyLogin(t *testing.T) {
 		},
 	}
 
-		for _, tc := range tests {
+	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			mockService := &authServiceMock{}
 			if tc.setupMock != nil { tc.setupMock(mockService)}
