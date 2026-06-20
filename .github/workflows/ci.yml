@@ -42,11 +42,8 @@ jobs:
     steps:
     - name: Pull new code and restart Docker
       run: |
-        # Заходим в рабочую папку вашего проекта на сервере
         cd /home/god/avito-tech-2024
         
-        # Скачиваем свежие коммиты с гитхаба
         git pull origin main
         
-        # Пересобираем и обновляем контейнеры в фоне
         docker compose up -d --build
