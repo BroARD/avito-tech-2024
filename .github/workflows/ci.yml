@@ -43,7 +43,7 @@ jobs:
     - name: Pull new code and restart Docker
       run: |
         # Заходим в рабочую папку вашего проекта на сервере
-        cd avito-tech-2024/
+        cd /home/god/avito-tech-2024
         
         # Скачиваем свежие коммиты с гитхаба
         git pull origin main
