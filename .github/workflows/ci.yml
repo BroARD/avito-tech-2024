@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Эта часть по-прежнему собирается в облаке GitHub
     permissions:
       contents: write
 
@@ -32,3 +32,21 @@ jobs:
         chart: 'true' 
         amend: 'true'
       if: github.event_name == 'push'
+
+  # --- НОВЫЙ БЛОК ДЕПЛОЯ ДЛЯ ЛОКАЛЬНОГО СЕРВЕРА ---
+  deploy:
+    runs-on: self-hosted 
+    needs: build-and-test 
+    if: github.event_name == 'push' 
+
+    steps:
+    - name: Pull new code and restart Docker
+      run: |
+        # Заходим в рабочую папку вашего проекта на сервере
+        cd avito-tech-2024/
+        
+        # Скачиваем свежие коммиты с гитхаба
+        git pull origin main
+        
+        # Пересобираем и обновляем контейнеры в фоне
+        sudo docker compose up -d --build
